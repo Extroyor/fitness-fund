@@ -11,7 +11,5 @@ export default function SignOutButton() {
     router.push("/sign-in");
   }
 
-  return (
-    <button onClick={handleSignOut}>Sign Out</button>
-  );
+  return <button onClick={handleSignOut}>Sign Out</button>;
 }

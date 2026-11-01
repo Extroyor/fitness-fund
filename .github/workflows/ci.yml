@@ -1,28 +1,25 @@
 name: CI
 
 on:
-    push:
-        branches: [main]
-    pull_request:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
-    check:
-        runs-on: ubuntu-latest
-        env:
-            DATABASE_URL: postgresql://user:password@localhost:5432/placeholder
-            BETTER_AUTH_SECRET: ci-placeholder-secret-at-least-32-characters
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: 24
-                  cache: npm
-            - run: npm ci
-            - name: Run lint
-              run: npm run lint
-            - name: Run type check
-              run: npm run typecheck
-            - run: npm run build 
-
-        
-            
+  check:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://user:password@localhost:5432/placeholder
+      BETTER_AUTH_SECRET: ci-placeholder-secret-at-least-32-characters
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Run lint
+        run: npm run lint
+      - name: Run type check
+        run: npm run typecheck
+      - run: npm run build
