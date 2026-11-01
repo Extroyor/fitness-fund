@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum ProofStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  role          Role       @default(USER)
+  timezone      String     @default("UTC")
+  status        UserStatus @default(ACTIVE)
+
+  goalSets           GoalSet[]
+  checkIns           CheckIn[]
+  payments           Payment[]    @relation("PaymentUser")
+  confirmedPayments  Payment[]    @relation("PaymentConfirmer")
+  adjustments        Adjustment[] @relation("AdjustmentUser")
+  createdAdjustments Adjustment[] @relation("AdjustmentCreator")
+}
+
+model Season {
+  id           String   @id @default(cuid())
+  year         Int      @unique
+  startDate    DateTime @db.Date
+  endDate      DateTime @db.Date
+  flexDays     Int      @default(24)
+  exitFine     Decimal  @default(150) @db.Decimal(10, 2)
+  dailyFineCap Decimal  @default(2.5) @db.Decimal(10, 2)
+
+  goalSets    GoalSet[]
+  checkIns    CheckIn[]
+  payments    Payment[]
+  adjustments Adjustment[]
+}
+
+model GoalSet {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  seasonId      String
+  season        Season    @relation(fields: [seasonId], references: [id])
+  effectiveFrom DateTime  @db.Date
+  goal1         String
+  goal1Fine     Decimal   @default(0.5) @db.Decimal(10, 2)
+  goal2         String?
+  goal2Fine     Decimal?  @db.Decimal(10, 2)
+  fitnessFine   Decimal   @default(1.5) @db.Decimal(10, 2)
+  lockedAt      DateTime?
+}
+
+model CheckIn {
+  id               String      @id @default(cuid())
+  userId           String
+  user             User        @relation(fields: [userId], references: [id])
+  seasonId         String
+  season           Season      @relation(fields: [seasonId], references: [id])
+  date             DateTime    @db.Date
+  goal1Completed   Boolean     @default(false)
+  goal1Note        String?
+  goal2Completed   Boolean     @default(false)
+  goal2Note        String?
+  fitnessCompleted Boolean     @default(false)
+  fitnessNote      String?
+  notes            String?
+  flexUsed         Boolean     @default(false)
+  proofStatus      ProofStatus @default(PENDING)
+  createdAt        DateTime    @default(now())
+
+  @@unique([userId, date])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  userId        String
+  user          User          @relation("PaymentUser", fields: [userId], references: [id])
+  seasonId      String
+  season        Season        @relation(fields: [seasonId], references: [id])
+  amount        Decimal       @db.Decimal(10, 2)
+  forMonth      Int
+  status        PaymentStatus @default(PENDING)
+  confirmedById String?
+  confirmedBy   User?         @relation("PaymentConfirmer", fields: [confirmedById], references: [id])
+  createdAt     DateTime      @default(now())
+}
+
+model Adjustment {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation("AdjustmentUser", fields: [userId], references: [id])
+  seasonId    String
+  season      Season   @relation(fields: [seasonId], references: [id])
+  amount      Decimal  @db.Decimal(10, 2)
+  reason      String
+  createdById String
+  createdBy   User     @relation("AdjustmentCreator", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+}
