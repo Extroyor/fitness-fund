@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fitness Fund
+A web app to track and manage The Fitness Fund's members activities. Where members can log their daily workouts and goals and fines are automatically tallied.
+
+## About
+This project has been created to replace the current Fitness Fund's Google Apps Script web interface. The Google Apps Script's interface is very slow and lacks core UX/UI design niceties. This new web app will make everything easier and more intuitive for members. Members will have their own secure accounts instead of selecting their name and being able to see other members details. Admin account will be a new addtion as well to make managing the Fitness Fund more secure.
+
+## Features
+- [ ] Home page with fund total and user status
+- [ ] Admin dashboard
+- [ ] Leaderboard + Stats
+- [ ] Payment management
+- [ ] Daily check in
+- [ ] Monthly goals
+- [ ] Photo proof upload
+- [ ] Streaks and calendar map
+- [ ] Mobile focused redesign + PWA
+- [ ] Disputes and Voting
+- [ ] Fitness Fund Wrapped
+
+## Tech Stack
+- Next.js
+- TypeScript
+- Tailwind
+- PostgreSQL (Neon)
+- Prisma
+- Better Auth
+- Vercel
 
 ## Getting Started
-
-First, run the development server:
-
+How to run locally: 
 ```bash
+git clone https://github.com/Extroyor/fitness-fund.git
+cd fitness-fund
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## STATUS: 
+🚧 In development, see Milestones.
