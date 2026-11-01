@@ -8,6 +8,9 @@ on:
 jobs:
     check:
         runs-on: ubuntu-latest
+        env:
+            DATABASE_URL: postgresql://user:password@localhost:5432/placeholder
+            BETTER_AUTH_SECRET: ci-placeholder-secret-at-least-32-characters
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
@@ -20,4 +23,6 @@ jobs:
             - name: Run type check
               run: npm run typecheck
             - run: npm run build 
+
+        
             
