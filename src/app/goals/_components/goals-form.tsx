@@ -1,5 +1,8 @@
 "use client";
 
+import { useActionState } from "react";
+import { saveGoals } from "../actions";
+
 type GoalsFormProps = {
   goalSet: {
     goal1: string;
@@ -12,9 +15,12 @@ type GoalsFormProps = {
 
 export default function GoalsForm({ goalSet }: GoalsFormProps) {
   const locked = goalSet !== null;
+  const [state, formAction, pending] = useActionState(saveGoals, {
+    error: "",
+  });
   return (
     <>
-      <form>
+      <form action={formAction}>
         <label htmlFor="goal1">Goal 1</label>
         <input
           type="text"
@@ -29,7 +35,7 @@ export default function GoalsForm({ goalSet }: GoalsFormProps) {
           type="number"
           id="goal1-fine"
           name="goal1-fine"
-          defaultValue={goalSet?.goal1Fine ?? 0}
+          defaultValue={goalSet?.goal1Fine ?? 0.5}
           step="0.5"
           min="0"
           disabled
@@ -60,13 +66,18 @@ export default function GoalsForm({ goalSet }: GoalsFormProps) {
           type="number"
           id="fitness-fine"
           name="fitness-fine"
-          defaultValue={goalSet?.fitnessFine ?? 0}
+          defaultValue={goalSet?.fitnessFine ?? 2}
           step="0.5"
           min="0"
           disabled
         />
 
-        {!locked && <button type="submit">Submit</button>}
+        {!locked && (
+          <button type="submit" disabled={pending}>
+            {pending ? "Saving..." : "Lock Goals"}
+          </button>
+        )}
+        {state.error && <p style={{ color: "red" }}>{state.error}</p>}
       </form>
     </>
   );
